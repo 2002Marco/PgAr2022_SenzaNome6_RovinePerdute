@@ -3,6 +3,7 @@ package it.unibs.pa;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
@@ -45,7 +46,7 @@ public static XMLStreamReader creaReader (String nomeFile, String nomeConEstensi
 		return xmlw;
 	}
 	
-	public static List<Citta> prendiProssimaCitta(String nomeFile, String nomeConEstensione) throws XMLStreamException {
+	public static List<Citta> creaMappa(String nomeFile, String nomeConEstensione) throws XMLStreamException {
 		XMLStreamReader xmlr = creaReader(nomeFile, nomeConEstensione);
 		int id = 0, x = 0, y= 0, h =0;
 		String nome = "";
@@ -78,6 +79,28 @@ public static XMLStreamReader creaReader (String nomeFile, String nomeConEstensi
 			
 		}while(xmlr.hasNext());
 		return citta;		
+	}
+	
+	public static void outputPercorso(String team, Deque <Citta> percorso, XMLStreamWriter xmlw) throws XMLStreamException {
+		
+		
+		Citta rovina = percorso.getLast();
+		
+		
+		xmlw.writeStartElement("routes");
+		xmlw.writeStartElement("route");
+		xmlw.writeAttribute("Team", team);
+		xmlw.writeAttribute("cost", rovina.getDistanza().toString());
+		xmlw.writeAttribute("cities", Integer.toString(percorso.size()));
+
+		for(Citta c: percorso) {
+			xmlw.writeStartElement("city");
+			xmlw.writeAttribute("id", Integer.toString(c.getId()));
+			xmlw.writeAttribute("nome", c.getNome());
+			xmlw.writeEndElement();
+			
+		}
+		xmlw.writeEndElement();
 	}
 
 }

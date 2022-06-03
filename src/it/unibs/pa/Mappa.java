@@ -11,36 +11,29 @@ import javax.xml.stream.XMLStreamException;
 public class Mappa {
 	
 	private static  List <Citta> mappa;
-	private  int team;
 	private int numCitta;
 	
-	public Mappa(String nomeFile, String nomeFileConEstensione, int team) throws XMLStreamException {
-		mappa = XML.prendiProssimaCitta(nomeFile, nomeFileConEstensione);
+	public Mappa(String nomeFile, String nomeFileConEstensione) throws XMLStreamException {
+		mappa = XML.creaMappa(nomeFile, nomeFileConEstensione);
 		for(Citta c : mappa) {
 			c.creaLinks();
 		}
 		
-		this.team = team;
 		this.numCitta = mappa.size();
 		}
 	
-	public void aggiungiCitta(Citta c) {
-		mappa.add(c);
-	}
 	
-	public void stampaMappa() {
-		
-		for(Citta c: mappa) {
-			System.out.println(c);
-		}
-		this.numCitta = mappa.size();
-	}
-
 	public static  List<Citta> getMappa() {
 		return mappa;
 	}
 	
-	public Deque<Citta> percorsoMinimo () {
+	public Deque<Citta> percorsoMinimo (int team) {
+		
+		for(Citta c: mappa) {
+			c.setCittaPrecedente(null);
+			c.setDistanza(Double.POSITIVE_INFINITY);
+		}
+		
 		Citta cittaCorrente = mappa.get(0);		//campo base
 		cittaCorrente .setDistanza(0.0);		//poniamo la distanza da se stesso a zero
 		Set <Citta> cittaDaVisitare = new HashSet<Citta>();
@@ -52,7 +45,7 @@ public class Mappa {
 			 vicini.retainAll(cittaDaVisitare); //vicini non visitati
 			 
 			 for(Citta c: vicini) {
-				 double distanza = distanza(cittaCorrente, c);
+				 double distanza = distanza(cittaCorrente, c, team);
 				 if(distanza < c.getDistanza()) {
 					 c.setDistanza(distanza);
 					 c.setCittaPrecedente(cittaCorrente);
@@ -93,7 +86,7 @@ public class Mappa {
 		}
 		return cittaPiuVicina;
 	}
-	public  Double distanza (Citta c1, Citta c2) {
+	public  Double distanza (Citta c1, Citta c2, int team) {
 		if (team == 0)
 			return c1.getDistanza() + c1.getPosizione().distanzaEuclidea(c2.getPosizione());
 		else
