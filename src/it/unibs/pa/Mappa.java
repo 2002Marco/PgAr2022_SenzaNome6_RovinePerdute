@@ -16,9 +16,8 @@ public class Mappa {
 	public Mappa(String nomeFile, String nomeFileConEstensione) throws XMLStreamException {
 		mappa = XML.creaMappa(nomeFile, nomeFileConEstensione);
 		for(Citta c : mappa) {
-			c.creaLinks();
+			c.creaLinks();		//crea i collegamenti di ogni citta
 		}
-		
 		this.numCitta = mappa.size();
 		}
 	
@@ -29,7 +28,7 @@ public class Mappa {
 	
 	public Deque<Citta> percorsoMinimo (int team) {
 		
-		for(Citta c: mappa) {
+		for(Citta c: mappa) {		//imposto tute le distanza ad infinito (per il secondo team)
 			c.setCittaPrecedente(null);
 			c.setDistanza(Double.POSITIVE_INFINITY);
 		}
@@ -44,24 +43,24 @@ public class Mappa {
 			 Set <Citta> vicini =  cittaCorrente.getLinks();
 			 vicini.retainAll(cittaDaVisitare); //vicini non visitati
 			 
-			 for(Citta c: vicini) {
+			 for(Citta c: vicini) {		//per ogni vicino della citta corrente aggiorno la distanza dalla base 
 				 double distanza = distanza(cittaCorrente, c, team);
 				 if(distanza < c.getDistanza()) {
 					 c.setDistanza(distanza);
 					 c.setCittaPrecedente(cittaCorrente);
 				 }
 			 }
-			 cittaDaVisitare.remove(cittaCorrente);
+			 cittaDaVisitare.remove(cittaCorrente);		//rimuovo la citta corrente dalle citta da visitare
 			 cittaCorrente = cittaPiuVicina(cittaDaVisitare);
 			 
-			 if (cittaCorrente.equals(mappa.get(numCitta -1)))
+			 if (cittaCorrente.equals(mappa.get(numCitta -1)))		//se siamo arrivati alla rovina allora interrompiamo il ciclo
 				 break; 
 		}
 		
 		return creaPercorsoMinimo(mappa.get(numCitta - 1));
 	}
 
-	public  Citta cittaPiuVicina(Set <Citta> cittaDaVisitare) {
+	public  Citta cittaPiuVicina(Set <Citta> cittaDaVisitare) {		//metodo che restituisce la citta piu vicina dalla base
 		Citta cittaPiuVicina = null;
 		Double max = Double.POSITIVE_INFINITY;
 		int id = 0;
@@ -78,7 +77,7 @@ public class Mappa {
 				id = c.getId();
 				cittaPercorse = creaPercorsoMinimo(c).size();
 			}
-			else if (c.getDistanza()  == max && creaPercorsoMinimo(c).size() == cittaPercorse && c.getId() < id) {
+			else if (c.getDistanza()  == max && creaPercorsoMinimo(c).size() == cittaPercorse && c.getId() > id) {
 				cittaPiuVicina = c;
 				id = c.getId();
 				cittaPercorse = creaPercorsoMinimo(c).size();
@@ -86,7 +85,7 @@ public class Mappa {
 		}
 		return cittaPiuVicina;
 	}
-	public  Double distanza (Citta c1, Citta c2, int team) {
+	public  Double distanza (Citta c1, Citta c2, int team) {		//metodo che restituisce la distanza di una citta dalla base in base al team
 		if (team == 0)
 			return c1.getDistanza() + c1.getPosizione().distanzaEuclidea(c2.getPosizione());
 		else
@@ -95,7 +94,7 @@ public class Mappa {
 	}
 	
 	public  Deque <Citta> creaPercorsoMinimo(Citta c) {
-		Deque <Citta> percorsoMinimo  = new ArrayDeque<Citta>();
+		Deque <Citta> percorsoMinimo  = new ArrayDeque<Citta>();		//ricostruisco il percorso partendo dalla rovina
 		
 		while(c.getCittaPrecedente() != null) {
 			percorsoMinimo.addFirst(c);

@@ -18,19 +18,8 @@ public class Coordinata {
 		return x;
 	}
 
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-
 	public int getY() {
 		return y;
-	}
-
-
-	public void setY(int y) {
-		this.y = y;
 	}
 
 
@@ -38,16 +27,13 @@ public class Coordinata {
 		return h;
 	}
 
-
-	public void setH(int h) {
-		this.h = h;
-	}
 	
-	public Double distanzaEuclidea(Coordinata altro) {
+	
+	public Double distanzaEuclidea(Coordinata altro) {		//metodo che calcola la distanza in base alla distanza di due punti nel piano
 		return Math.sqrt(Math.pow((this.x - altro.x), 2) + Math.pow((this.y - altro.y), 2));
 	}
 	
-	public int differenzaAltezza(Coordinata altro) {
+	public int differenzaAltezza(Coordinata altro) {	//metodo che calcola la distanza in base all'altezza
 		return Math.abs(this.h - altro.h);
 	}
 	

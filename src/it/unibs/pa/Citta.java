@@ -5,17 +5,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-
 public class Citta {
 	
 	private int id;
 	private String nome;
 	private Coordinata posizione;
-	private ArrayList <Integer> collegamenti;
-	private Set <Citta> links;
+	private ArrayList <Integer> collegamenti; //L'id delle citta collegate 
+	private Set <Citta> links;	//le citta collegate
 	
-	private Double distanza; 
-	private Citta cittaPrecedente;
+	private Double distanza; //distanza dal nodo iniziale 
+	private Citta cittaPrecedente;	//da quale citta siamo passati prima di arriavre qui
 	
 	
 	public Citta(int id, String nome, Coordinata posizione, ArrayList <Integer> collegamenti) {
@@ -24,7 +23,7 @@ public class Citta {
 		this.posizione = posizione;
 		this.collegamenti = collegamenti;
 		this.links = new HashSet <Citta>();
-		this.distanza = Double.POSITIVE_INFINITY;
+		this.distanza = Double.POSITIVE_INFINITY;		
 		this.cittaPrecedente = null;
 	}
 	
@@ -80,15 +79,4 @@ public class Citta {
 		return links;
 	}
 
-	@Override
-	public String toString() {
-		String toReturn = new String();
-		toReturn = toReturn.concat(String.format("ID = %d\nNome = %s\n", id, nome));
-		toReturn = toReturn.concat(posizione.toString());
-		return toReturn;
-	}
-
-	
-	
-	
 }
